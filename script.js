@@ -1,12 +1,16 @@
 const fruitForm = document.querySelector("#inputSection form");
 const fruitList = document.querySelector("#fruitSection ul");
 const fruitNutrition = document.querySelector("#nutritionSection p");
+const createForm = document.querySelector("#createForm");
+const deleteForm = document.querySelector("#deleteForm");
 
 let cal = 0;
 const fruitCal = {};
 const apiKey = "49561278-0045f3ad356d6e1e391312a23";
 
 fruitForm.addEventListener("submit", extractFruit);
+createForm.addEventListener("submit", createNewFruit);
+deleteForm.addEventListener("submit", deleteFruit);
 
 function extractFruit(e) {
   e.preventDefault();
@@ -58,4 +62,67 @@ function removeFruit(e) {
 
   delete fruitCal[fruitName];
   e.target.remove();
+}
+
+async function createNewFruit(params) {
+  params.preventDefault();
+
+  const response = await fetch("https://fruit-api-rdpe.onrender.com/fruits", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      name: params.target.fruitInput.value,
+    }),
+  });
+  //console.log(response);
+  let messageStatus = document.querySelector("#createMessage");
+
+  if (response.status === 201) {
+    params.target.fruitInput.value = "";
+    messageStatus.textContent = "Fruit Successfully Created!";
+
+    setTimeout(() => {
+      messageStatus.textContent = "";
+    }, 4000);
+  } else {
+    params.target.fruitInput.value = "";
+    messageStatus.textContent = "Fruit Creation Failed!";
+    setTimeout(() => {
+      messageStatus.textContent = "";
+    }, 4000);
+  }
+}
+
+async function deleteFruit(params) {
+  params.preventDefault();
+  let fruit = params.target.fruitInput.value;
+
+  const response = await fetch(
+    `https://fruit-api-rdpe.onrender.com/fruits/${fruit}`,
+    {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name: params.target.fruitInput.value,
+      }),
+    }
+  );
+  if (response.status === 204) {
+    params.target.fruitInput.value = "";
+    deleteMessage.textContent = "Fruit Successfully Deleted!";
+
+    setTimeout(() => {
+      deleteMessage.textContent = "";
+    }, 4000);
+  } else {
+    params.target.fruitInput.value = "";
+    deleteMessage.textContent = "Fruit Deletion Failed!";
+    setTimeout(() => {
+      deleteMessage.textContent = "";
+    }, 4000);
+  }
 }
