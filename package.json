@@ -1,0 +1,15 @@
+{
+  "name": "fruit-salad",
+  "version": "1.0.0",
+  "main": "script.js",  
+  "scripts": {
+    "dev": "watchify ./script.js -o bundle.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "watchify": "^4.0.0"
+  }
+}
